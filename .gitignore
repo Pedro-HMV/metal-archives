@@ -3,3 +3,6 @@ venv/
 .settings/
 **/.env
 __pycache__/
+
+logs/
+**/page.html
