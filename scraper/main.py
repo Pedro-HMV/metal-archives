@@ -1,8 +1,12 @@
+import pathlib
+
 import requests
 from band import Band
 from bs4 import BeautifulSoup
 
 URL = "https://www.metal-archives.com/bands/K.A.IN/3540331289"
+PATH = pathlib.Path(__file__).parent
+FILENAME = "page.html"
 
 
 class Scraper:
@@ -13,21 +17,21 @@ class Scraper:
     def get_page(self):
         self.page = requests.get(self.url, timeout=10)
 
-    def print(self) -> None:
-        with open("page.html", "w") as f:
+    def write_file(self) -> None:
+        with open(PATH / FILENAME, "w") as f:
             f.write(self.page.text)
 
 
-def print_page() -> None:
+def create_page() -> None:
     scraper = Scraper(URL)
     scraper.get_page()
-    scraper.print()
+    scraper.write_file()
 
 
 def create_band() -> Band:
     band = Band()
 
-    with open("./page.html", "r") as f:
+    with open(PATH / FILENAME, "r") as f:
         page = f.read()
 
     soup = BeautifulSoup(page, "html.parser")
@@ -38,6 +42,7 @@ def create_band() -> Band:
 
 
 def main():
+    create_page()
     band = create_band()
     print(band.to_json())
 
